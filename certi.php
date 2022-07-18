@@ -9,17 +9,31 @@
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
 ></script>
+<style>
+  .profileImg {
+    position: absolute;
+    top: 238px;
+    left: 103px;
+    height: 89px;
+    width: 89px;
+  }
+</style>
+
 
 <button onClick="pdf();">Print to PDF2</button>
 <?php
-$var =  $_POST["name"];
-$image=$_POST["myfile"]
+$name =  $_POST["name"];
+if (isset($_FILES['myfile'])) {
+  $aExtraInfo = getimagesize($_FILES['myfile']['tmp_name']);
+  $sImage = "data:" . $aExtraInfo["mime"] . ";base64," . base64_encode(file_get_contents($_FILES['myfile']['tmp_name']));
+  // echo '<p>The image has been uploaded successfully</p><p>Preview:</p><img src="' . $sImage . '" alt="Your Image" />';
+}
 ?>
 
 <script>
   $(document).ready(function() {
     <?php
-       echo "var jsvar ='$var';";
+       echo "var jsvar ='$name';";
    ?>
    console.log(jsvar);
    
@@ -55,16 +69,16 @@ var qrcode = new QRCode("qr_code", {
     left: 582px;
 }">
 </div>
-<img src=" <?php echo $_POST["name"]; ?>" width="300" height="300"/>
+<img src="<?php echo $sImage; ?>" alt="<?php echo $name; ?>" width="90" height="90" class="profileImg"/>
     <div style="position: absolute; top: 323px; left: 87px; margin-top: 10px">
       <p style="margin: 2px 0 2px 0">
         Father's / Husband's Name
         <span style="text-decoration: underline; font-size: 18px"
-          >&nbsp;&nbsp;Mr.Aadarsh Thakur&nbsp;&nbsp;</span
+          >&nbsp;&nbsp; <?php echo $_POST["fatherName"]; ?>&nbsp;&nbsp;</span
         >
         Mother's Name
         <span style="text-decoration: underline; font-size: 18px"
-          >&nbsp;&nbsp;Mrs.Rinky Thakur&nbsp;&nbsp;</span
+          >&nbsp;&nbsp; <?php echo $_POST["motherName"]; ?>&nbsp;&nbsp;</span
         ><br>
         has passed
         <span style="text-decoration: underline; font-size: 18px"
@@ -73,9 +87,9 @@ var qrcode = new QRCode("qr_code", {
         (06 Months) in the period<br>
         of
         <span style="text-decoration: underline; font-size: 18px"
-          >&nbsp;&nbsp;20-09-21&nbsp;&nbsp;</span
+          >&nbsp;&nbsp; <?php echo $_POST["dateFrom"]; ?>&nbsp;&nbsp;</span
         >to<span style="text-decoration: underline; font-size: 18px"
-          >&nbsp;&nbsp;20-09-21&nbsp;&nbsp;</span
+          >&nbsp;&nbsp; <?php echo $_POST["dateTo"]; ?>&nbsp;&nbsp;</span
         >
         from our authorised study centre<br>
         <span style="text-decoration: underline; font-size: 18px"
@@ -84,10 +98,10 @@ var qrcode = new QRCode("qr_code", {
         ><br>
         with Grade
         <span style="text-decoration: underline; font-size: 18px"
-          >&nbsp;&nbsp;A+&nbsp;&nbsp;</span
+          >&nbsp;&nbsp; <?php echo $_POST["Grade"]; ?>&nbsp;&nbsp;</span
         >and
         <span style="text-decoration: underline; font-size: 18px"
-          >&nbsp;&nbsp;82&nbsp;&nbsp;</span
+          >&nbsp;&nbsp; <?php echo $_POST["Percentage"]; ?>&nbsp;&nbsp;</span
         >percentage
       </p>
       <!-- <p style="margin: 2px 0 2px 0">
