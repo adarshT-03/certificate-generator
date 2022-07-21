@@ -20,9 +20,17 @@
 </style>
 
 
-<button onClick="pdf();">Print to PDF2</button>
+<button onClick="pdf();">Ddownload</button>
 <?php
 $name =  $_POST["name"];
+$Enrollment=$_POST["enrollmentNo"];
+$father=$_POST["fatherName"];
+$mother=$_POST["motherName"];
+$course=$_POST["courseName"];
+$dateFrom=$_POST["dateFrom"];
+$dateTo=$_POST["dateTo"];
+$Grade=$_POST["Grade"];
+$Percentage=$_POST["Percentage"];
 if (isset($_FILES['myfile'])) {
   $aExtraInfo = getimagesize($_FILES['myfile']['tmp_name']);
   $sImage = "data:" . $aExtraInfo["mime"] . ";base64," . base64_encode(file_get_contents($_FILES['myfile']['tmp_name']));
@@ -33,9 +41,22 @@ if (isset($_FILES['myfile'])) {
 <script>
   $(document).ready(function() {
     <?php
-       echo "var jsvar ='$name';";
+       echo "var name ='$name';";
+       echo "var father ='$father';";
+       echo "var mother ='$mother';";
+       echo "var course ='$course';";
+       echo "var dateFrom ='$dateFrom';";
+       echo "var dateTo ='$dateTo';";
+       echo "var Grade ='$Grade';";
+       echo "var course ='$course';";
+       echo "var Percentage ='$Percentage';";
+       echo "var Enrollment ='$Enrollment';";
+      
    ?>
-   console.log(jsvar);
+  var obj=`Enrollment No: ${Enrollment}, Name: ${name},Gradae: ${Grade}, Percentage:${Percentage},Course: ${course} Father Name: ${father}, Mother Name: ${mother}`
+  
+
+  
    
    
  
@@ -43,7 +64,7 @@ if (isset($_FILES['myfile'])) {
   
 
 var qrcode = new QRCode("qr_code", {
-    text:jsvar,
+    text:obj,
     width: 128,
     height: 128,
     colorDark : "#000000",
@@ -82,28 +103,34 @@ var qrcode = new QRCode("qr_code", {
         ><br>
         has passed
         <span style="text-decoration: underline; font-size: 18px"
-          >&nbsp;&nbsp;Diploma in Computer Application DCA&nbsp;&nbsp;</span
+          >&nbsp;&nbsp; <?php echo $_POST["courseName"]; ?>&nbsp;&nbsp;</span
         >
         (06 Months) in the period<br>
         of
         <span style="text-decoration: underline; font-size: 18px"
-          >&nbsp;&nbsp; <?php echo $_POST["dateFrom"]; ?>&nbsp;&nbsp;</span
+          >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $_POST["dateFrom"]; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span
         >to<span style="text-decoration: underline; font-size: 18px"
-          >&nbsp;&nbsp; <?php echo $_POST["dateTo"]; ?>&nbsp;&nbsp;</span
+          >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_POST["dateTo"]; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span
         >
         from our authorised study centre<br>
         <span style="text-decoration: underline; font-size: 18px"
-          >&nbsp;&nbsp;IDEAL COMPUTER CENTRE, DHANBAD,
-          JHARKHAND&nbsp;&nbsp;</span
+          >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IDEAL COMPUTER CENTRE, DHANBAD,
+          JHARKHAND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span
         ><br>
         with Grade
         <span style="text-decoration: underline; font-size: 18px"
-          >&nbsp;&nbsp; <?php echo $_POST["Grade"]; ?>&nbsp;&nbsp;</span
+          >&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $_POST["Grade"]; ?>&nbsp;&nbsp;&nbsp;&nbsp;</span
         >and
         <span style="text-decoration: underline; font-size: 18px"
-          >&nbsp;&nbsp; <?php echo $_POST["Percentage"]; ?>&nbsp;&nbsp;</span
-        >percentage
+          >&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $_POST["Percentage"]; ?>&nbsp;&nbsp;&nbsp;&nbsp;</span
+        >percentage.
       </p>
+      <p style="position: absolute;
+    left: 140px;
+    top: 95px;"><?php echo $_POST["enrollmentNo"]; ?></p>
+      <p style="position: absolute;
+    left: 490px;
+    top: 98px;"><?php echo $_POST["date"]; ?></p>
       <!-- <p style="margin: 2px 0 2px 0">
         has passed
         <span style="text-decoration: underline; font-size: 18px"
@@ -149,10 +176,17 @@ var qrcode = new QRCode("qr_code", {
 
 <script>
   function pdf() {
+    <?php
+
+$name = $_POST["name"];
+?>
+<?php
+echo "var jsvar ='$name';";
+?>
     var element = document.getElementById("printable2");
     var opt = {
       margin: [15, 0, 15, 0],
-      filename: `CV-${name}.pdf`,
+      filename: `${jsvar}.pdf`,
       image: { type: "jpeg", quality: 1 },
       html2canvas: {
         dpi: 192,
@@ -167,182 +201,6 @@ var qrcode = new QRCode("qr_code", {
     html2pdf().set(opt).from(element).save();
   }
 
-  function printToPDF2() {
-    console.log("converting...");
-
-    var printableArea = document.getElementById("printable2");
-
-    html2canvas(printableArea, {
-      html2canvas: { scale: 4 },
-      scale: 4,
-      Image: { quality: 1 },
-      useCORS: true,
-      onrendered: function (canvas) {
-        var pdf = new jsPDF("p", "pt", "letter");
-
-        var pageHeight = 980;
-        var pageWidth = 900;
-        for (var i = 0; i <= printableArea.clientHeight / pageHeight; i++) {
-          var srcImg = canvas;
-          var sX = 0;
-          var sY = pageHeight * i; // start 1 pageHeight down for every new page
-          var sWidth = pageWidth;
-          var sHeight = pageHeight;
-          var dX = 0;
-          var dY = 0;
-          var dWidth = pageWidth;
-          var dHeight = pageHeight;
-
-          window.onePageCanvas = document.createElement("canvas");
-          onePageCanvas.setAttribute("width", pageWidth);
-          onePageCanvas.setAttribute("height", pageHeight);
-          var ctx = onePageCanvas.getContext("2d");
-          ctx.drawImage(
-            srcImg,
-            sX,
-            sY,
-            sWidth,
-            sHeight,
-            dX,
-            dY,
-            dWidth,
-            dHeight
-          );
-
-          var canvasDataURL = onePageCanvas.toDataURL("image/png", 1.0);
-          var width = onePageCanvas.width;
-          var height = onePageCanvas.clientHeight;
-
-          if (i > 0)
-            // if we're on anything other than the first page, add another page
-            pdf.addPage(612, 791); // 8.5" x 11" in pts (inches*72)
-
-          pdf.setPage(i + 1); // now we declare that we're working on that page
-          pdf.addImage(
-            canvasDataURL,
-            "PNG",
-            20,
-            40,
-            width * 0.62,
-            height * 0.62
-          ); // add content to the page
-        }
-        pdf.save("test.pdf");
-      },
-    });
-  }
-  function createPDFObject() {
-    html2canvas(document.getElementById("printable2"), {
-      onrendered: function (canvas) {
-        var contentWidth = canvas.width;
-        var contentHeight = canvas.height;
-
-        //One page pdf shows the height of canvas generated by html page;
-        var pageHeight = (contentWidth / 592.28) * 841.89;
-        //html page height without pdf generation
-        var leftHeight = contentHeight;
-        //Page offset
-        var position = 0;
-        //a4 paper size [595.28841.89], width and height of image in pdf of canvas generated by html page
-        var imgWidth = 595.28;
-        var imgHeight = (592.28 / contentWidth) * contentHeight;
-
-        //Return picture dataURL, parameters: picture format and sharpness (0-1)
-        var pageData = canvas.toDataURL("image/jpeg", 1.0);
-
-        //Direction is vertical by default, dimension ponits, format A4 [595.28841.89]
-        var pdf = new jsPDF("", "pt", "a4");
-
-        //There are two heights to distinguish, one is the actual height of the html page, and the height of the generated pdf page (841.89)
-        //When the content does not exceed the display range of one page of pdf, paging is not required
-        if (leftHeight < pageHeight) {
-          pdf.addImage(pageData, "JPEG", 0, 0, imgWidth, imgHeight);
-        } else {
-          while (leftHeight > 0) {
-            pdf.addImage(pageData, "JPEG", 0, position, imgWidth, imgHeight);
-            leftHeight -= pageHeight;
-            position -= 841.89;
-            //Avoid adding blank pages
-            if (leftHeight > 0) {
-              pdf.addPage();
-            }
-          }
-        }
-        pdf.save("stone.pdf");
-      },
-    });
-  }
-
-  function makePDF() {
-    var quotes = document.getElementById("printable2");
-    var opt = {
-      margin: 1,
-      filename: "myfile.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-    };
-    html2canvas(quotes, {
-      onrendered: function (canvas) {
-        //! MAKE YOUR PDF
-        var pdf = new jsPDF("p", "pt", "letter");
-
-        for (var i = 0; i <= quotes.clientHeight / 980; i++) {
-          //! This is all just html2canvas stuff
-          var srcImg = canvas;
-          var sX = 0;
-          var sY = 980 * i; // start 980 pixels down for every new page
-          var sWidth = 900;
-          var sHeight = 980;
-          var dX = 0;
-          var dY = 0;
-          var dWidth = 900;
-          var dHeight = 980;
-
-          window.onePageCanvas = document.createElement("canvas");
-          onePageCanvas.setAttribute("width", 900);
-          onePageCanvas.setAttribute("height", 980);
-          var ctx = onePageCanvas.getContext("2d");
-          // details on this usage of this function:
-          // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Using_images#Slicing
-          ctx.drawImage(
-            srcImg,
-            sX,
-            sY,
-            sWidth,
-            sHeight,
-            dX,
-            dY,
-            dWidth,
-            dHeight
-          );
-
-          // document.body.appendChild(canvas);
-          var canvasDataURL = onePageCanvas.toDataURL("image/png", 1.0);
-
-          var width = onePageCanvas.width;
-          var height = onePageCanvas.clientHeight;
-
-          //! If we're on anything other than the first page,
-          // add another page
-          if (i > 0) {
-            pdf.addPage(612, 791); //8.5" x 11" in pts (in*72)
-          }
-          //! now we declare that we're working on that page
-          pdf.setPage(i + 1);
-          //! now we add content to that page!
-          pdf.addImage(
-            canvasDataURL,
-            "PNG",
-            20,
-            40,
-            width * 0.62,
-            height * 0.62
-          );
-        }
-        //! after the for loop is finished running, we save the pdf.
-        pdf.save("test.pdf");
-      },
-    });
-  }
+ 
+ 
 </script>
